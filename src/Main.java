@@ -12,6 +12,7 @@ public class Main {
         }catch(ClassNotFoundException e){
             System.out.println(e.getClass()+e.getMessage());
         }
+        //aa
      GUI a = new GUI(myStudentList);
     return;
 

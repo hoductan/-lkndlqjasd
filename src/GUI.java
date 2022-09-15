@@ -41,8 +41,10 @@ public class GUI {
     private JButton saveBtn;
     private JButton deleteBtn;
     private JButton clearBtn;
-    private JButton viewBtn;
+    public JButton viewBtn;
     private JButton test;
+    private table tb ;
+
 
 
     /**
@@ -64,8 +66,9 @@ public class GUI {
     /**
      * Create the application.
      */
-    public GUI(ArrayList<Student> a) {
-        myStudentList = a;
+    public GUI(ArrayList<Student> tempo) {
+        myStudentList = tempo;
+        tb= new table(myStudentList);
         initialize();
     }
 
@@ -76,7 +79,7 @@ public class GUI {
     private void initialize() {
         pointer = 0;
         frame = new JFrame();
-        frame.setBounds(100, 100, 570, 350);
+        frame.setBounds(300, 300, 570, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
@@ -89,6 +92,7 @@ public class GUI {
         searchTF = new JTextField();
         searchTF.setBounds(140, 1, 376, 30);
         searchTF.setColumns(10);
+        searchTF.setBackground(Color.LIGHT_GRAY);
         frame.getContentPane().add(searchTF);
 
         JLabel stunameLbl = new JLabel("Full Name");
@@ -249,6 +253,7 @@ public class GUI {
                 updateBtn.setEnabled(false);
                 addBtn.setEnabled(true);
                 deleteBtn.setEnabled(false);
+                searchTF.setText("");
                 l1.setText("");
             }
         });
@@ -294,6 +299,7 @@ public class GUI {
                 } catch (Exception a) {
                     System.out.println("loi ghi file");
                 }
+                viewBtn.doClick();
             }
         });
         updateBtn.addActionListener(new ActionListener() {
@@ -312,6 +318,8 @@ public class GUI {
                 clearBtn.setEnabled(false);
                 deleteBtn.setEnabled(false);
                 l1.setText("You are in Edit mode!");
+                EventQueue.invokeLater( () -> stuNameTF.requestFocusInWindow() );
+
             }
         });
         saveBtn.addActionListener(new ActionListener() {
@@ -351,6 +359,7 @@ public class GUI {
                 clearBtn.setEnabled(true);
                 deleteBtn.setEnabled(true);
                 l1.setText("Edited");
+                viewBtn.doClick();
             }
         });
         deleteBtn.addActionListener(new ActionListener() {
@@ -361,7 +370,7 @@ public class GUI {
 
                 int input = JOptionPane.showConfirmDialog(null,
                         "Do you want to delete?", "Select an Option...",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
                 if (input == 0) {
                     myStudentList.remove(pointer);
@@ -372,20 +381,24 @@ public class GUI {
                     }
                     pointer--;
                     nextBtn.doClick();
+                    viewBtn.doClick();
                 }
             }
         });
+
         viewBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-             table a = new table(myStudentList);
+                tb.dispose();
+                tb = new table(myStudentList);
             }
         });
         searchTF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String tempo= searchTF.getText();
-                System.out.println(tempo);
+                clearBtn.doClick();
+             //   System.out.println(tempo);
                 try {
 
                     if (tempo.isEmpty() )
@@ -398,7 +411,8 @@ public class GUI {
                     return;
                 }
                 for (int i = 0; i < myStudentList.size(); i++)
-                    if(tempo.equalsIgnoreCase(myStudentList.get(i).name) || tempo.equalsIgnoreCase(String.valueOf(myStudentList.get(i).ID)))
+//                    if(tempo.equalsIgnoreCase(myStudentList.get(i).name) || tempo.equalsIgnoreCase(String.valueOf(myStudentList.get(i).ID)))
+                    if(myStudentList.get(i).name.toLowerCase().contains(tempo.toLowerCase()) || String.valueOf(myStudentList.get(i).ID).toLowerCase().contains(tempo.toLowerCase()))
                     {
                         pointer=i-1;
                         nextBtn.doClick();
@@ -409,6 +423,7 @@ public class GUI {
         });
         // nextBtn.doClick();
         frame.setVisible(true);
+
 
     }
 

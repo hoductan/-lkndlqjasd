@@ -17,10 +17,12 @@ public class table {
         jt.setBounds(30,40,200,300);
         JScrollPane sp=new JScrollPane(jt);
         f.add(sp);
-        f.setSize(500,700);
+        f.setSize(500,250);
         f.setVisible(true);
         f.setTitle("List of Students");
-
+    }
+    public void dispose(){
+        f.dispose();
     }
 
-}  
+}
